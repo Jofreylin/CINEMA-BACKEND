@@ -1,5 +1,9 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Web_API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var databaseConnection = builder.Configuration.GetConnectionString($"DBCONNECTION");
 
 builder.Services
-    .AddApplication()
-    .AddInfrastructure();
-
+.AddApplication()
+.AddInfrastructure(databaseConnection);
 
 
 var app = builder.Build();
@@ -25,6 +29,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
