@@ -2,4 +2,4 @@
 
 UNICDA
 
-Backend para proyecto final de Programacion 3. Gestion de Cines
+Backend para proyecto final de Programacion 3. Gestion de Cines.
