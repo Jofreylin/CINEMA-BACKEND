@@ -10,7 +10,6 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Security.Claims;
 using Web_API.Utilities;
-using System.Web.Http;
 
 namespace Web_API.Middlewares
 {
@@ -29,9 +28,9 @@ namespace Web_API.Middlewares
             {
                 await _next(httpContext);
             }
-            catch (HttpResponseException ex)
+            catch (CustomException ex)
             {
-                await HandleExceptionAsync(httpContext, ex.Response.ReasonPhrase ?? "", ex.Response.ReasonPhrase ?? "", ex.Response.StatusCode);
+                await HandleExceptionAsync(httpContext, $"{ex.GetType()}. {ex?.Message} | {ex?.InnerException} | {ex?.InnerException?.Message}", ex?.Message ?? "", ex?.StatusCode ?? HttpStatusCode.BadRequest);
             }
             catch (Exception ex)
             {
