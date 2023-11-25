@@ -25,21 +25,6 @@ namespace Web_API.Utilities
         public string? Message { get; set; }
     }
 
-    public class CustomException : Exception
-    {
-        public string? ClassName { get; set; }
-        public string? MethodName { get; set; }
-        public int? CreationUserId { get; set; }
-        public HttpStatusCode StatusCode { get; set; }
-
-        public CustomException(string message, Exception innerException, HttpStatusCode statusCode, string? className, string? methodName, int? creationUserId = null)
-            : base(message, innerException)
-        {
-            ClassName = className;
-            MethodName = methodName;
-            CreationUserId = creationUserId;
-            StatusCode = statusCode;
-        }
-    }
+   
 
 }
