@@ -17,7 +17,7 @@ namespace Web_API.Controllers
             this._cinemaService = cinemaServ;
         }
 
-        [HttpGet]
+        [HttpGet("/all")]
         public async Task<ActionResult<ResponseManager<CinemasView>>> GetAll()
         {
             var response = await _cinemaService.GetAllCinemas();
@@ -27,7 +27,7 @@ namespace Web_API.Controllers
         [HttpPost]
         public async Task<ActionResult<ResponseManager<CinemasView>>> GetCinemasByName(string name)
         {
-            var response = await _cinemaService.GetCinemaByName(name);
+            var response = await _cinemaService.GetCinemasByName(name);
             return Ok(response);
         }
 

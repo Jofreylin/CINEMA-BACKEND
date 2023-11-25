@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace Application.Interfaces
 {
     public interface ICinemaRepository
     {
-        public async Task<ResponseManager<CinemasView>> GetAllCinemas();
+         Task<ResponseManager<CinemasView>> GetAllCinemas();
 
-        public async Task<ResponseManager<CinemasView>> GetCinemasByName(string cinemaName);
+        Task<ResponseManager<CinemasView>> GetCinemasByName(string cinemaName);
     }
 }

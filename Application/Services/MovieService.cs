@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,10 @@ namespace Application.Services
             _movieRepository = repository;
         }
 
-        public async Task<ResponseManager<MoviesView>> GetAllMovies()
+
+       public async Task<ResponseManager<MoviesView>> GetAllMovies()
         {
-            return  await _movieRepository.GetAllMovies();
+            return await _movieRepository.GetAllMovies();
         }
     }
 }

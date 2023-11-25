@@ -25,7 +25,7 @@ namespace Infrastructure.Persistence
             var response = new ResponseManager<CinemasView>();
             try
             {
-                var cines = _context.CinemasViews.Where(x => x.IsRecordActive == true)
+                var cines =  await _context.CinemasViews.Where(x => x.IsRecordActive == true)
                     .OrderByDescending(o => o.CreatedAt).ToListAsync();
                 response.DataList = cines;
             }
@@ -40,7 +40,7 @@ namespace Infrastructure.Persistence
             var response = new ResponseManager<CinemasView>();
             try
             {
-                var cines = _context.CinemasViews.Where(x => x.IsRecordActive == true && 
+                var cines =  await _context.CinemasViews.Where(x => x.IsRecordActive == true && 
                 x.CinemaName.Contains(cinemaName)).OrderByDescending(o => o.CreatedAt).ToListAsync();
                 response.DataList = cines;
             }
