@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
+using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -10,24 +11,27 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Persistence
+namespace Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private readonly CinemaContext _context;
-        public UserRepository(CinemaContext context) {
-            _context = context;        
+        private readonly IMapper _mapper;
+        public UserRepository(CinemaContext context, IMapper m) {
+            _context = context;
+            _mapper = m;
         }
 
-        public async Task<ResponseManager<UsersView>> GetAllUsers()
+        public async Task<ResponseManager<UsersViewDTO>> GetAllUsers()
         {
-            var response = new ResponseManager<UsersView>();
+            var response = new ResponseManager<UsersViewDTO>();
             try
             {
 
                 var list = await _context.UsersViews.Where(x=>x.IsRecordActive == true).OrderByDescending(o=>o.CreatedAt).ToListAsync();
+                var users = list.Select(_mapper.Map<UsersViewDTO>).ToList();
 
-                response.DataList = list;
+                response.DataList = users;
             }
             catch (Exception ex)
             {

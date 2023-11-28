@@ -10,6 +10,6 @@ namespace Application.Interfaces
 {
     public interface IUserService
     {
-        Task<ResponseManager<UsersView>> GetAllUsers();
+        Task<ResponseManager<UsersViewDTO>> GetAllUsers();
     }
 }

@@ -19,7 +19,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Persistence
+namespace Infrastructure.Repositories
 {
     public class AuthenticateRepository : IAuthenticateRepository
     {
