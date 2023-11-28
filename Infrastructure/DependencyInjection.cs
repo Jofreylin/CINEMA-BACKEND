@@ -2,7 +2,7 @@
 using Application.Interfaces;
 using Application.Services;
 using Infrastructure.Context;
-using Infrastructure.Persistence;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +13,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, string? databaseConnection, IConfigurationSection? jwtConfigurationSection)
         {
+            services.AddAutoMapper(typeof(DependencyInjection));
 
             if (jwtConfigurationSection is not null)
             {
@@ -26,6 +27,7 @@ namespace Infrastructure
 
             services.AddScoped<IAuthenticateRepository, AuthenticateRepository>();
             services.AddScoped<IAuthenticateService, AuthenticateService>();
+            
 
             return services;
         }

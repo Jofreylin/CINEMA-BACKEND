@@ -18,7 +18,7 @@ namespace Web_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ResponseManager<UsersView>>> GetAll()
+        public async Task<ActionResult<ResponseManager<UsersViewDTO>>> GetAll()
         {
             var response = await _userService.GetAllUsers();
             return Ok(response);
