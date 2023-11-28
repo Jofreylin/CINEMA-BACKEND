@@ -3,6 +3,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Context;
+using Infrastructure.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,10 @@ namespace Infrastructure.Repositories
                 var users = list.Select(_mapper.Map<UsersViewDTO>).ToList();
 
                 response.DataList = users;
+            }
+            catch (CustomException e)
+            {
+                throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
             }
             catch (Exception ex)
             {
