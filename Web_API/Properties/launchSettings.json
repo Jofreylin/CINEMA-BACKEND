@@ -8,7 +8,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7190;http://localhost:5210"
+      "applicationUrl": "https://localhost:7190;http://localhost:5210",
+      "nativeDebugging": true,
+      "sqlDebugging": true
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -16,7 +18,9 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "nativeDebugging": true,
+      "sqlDebugging": true
     },
     "Docker": {
       "commandName": "Docker",

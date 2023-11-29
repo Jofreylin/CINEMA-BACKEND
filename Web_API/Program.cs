@@ -1,6 +1,9 @@
 using Application;
+using Application.Interfaces;
+using Application.Services;
 using Infrastructure;
 using Infrastructure.Context;
+using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Web_API.Middlewares;
@@ -19,6 +22,11 @@ var databaseConnection = builder.Configuration.GetConnectionString($"DBCONNECTIO
 builder.Services
 .AddApplication()
 .AddInfrastructure(databaseConnection);
+builder.Services.AddScoped<ICinemaService, CinemaService>();
+builder.Services.AddScoped<ICinemaRepository, CinemaRepository>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+
 
 
 var app = builder.Build();
@@ -37,5 +45,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseDeveloperExceptionPage();
 app.Run();
+
+
+
