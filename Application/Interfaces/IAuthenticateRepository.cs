@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTOs;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IUserService
+    public interface IAuthenticateRepository
     {
-        Task<ResponseManager<UsersViewDTO>> GetAllUsers();
+        Task<ResponseManager<TokenDTO>> DoLogin(LoginDTO model);
+        Task<ResponseManager> DoSignUp(SignUpDTO model);
     }
 }

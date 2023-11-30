@@ -10,11 +10,11 @@ namespace Application.Interfaces
 {
    public interface ICinemaService
     {
-        string Delete(long id);
-        Task<ResponseManager<Cinema>> GetAllCinemas();
-        Task<ResponseManager<Cinema>> GetCinemasByName(string cinemaName);
-        Task<ResponseManager<Cinema>> Update(Cinema cine);
-        Task<ResponseManager<Cinema>> Create (Cinema cine);
-        Task<ResponseManager<Cinema>> GetById(long id);
+        Task<ResponseManager<CinemasView>> GetAllCinemas();
+        Task<ResponseManager<CinemasView>> GetCinemasByName(string cinemaName);
+        Task<ResponseManager> Delete(int cinemaId, int userId);
+        Task<ResponseManager<CinemaDTO>> Update(CinemaDTO cine);
+        Task<ResponseManager<CinemaDTO>> Create(CinemaDTO cine);
+        Task<ResponseManager<CinemasView>> GetById(int cinemaId);
     }
 }

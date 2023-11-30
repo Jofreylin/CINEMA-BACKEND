@@ -18,7 +18,7 @@ namespace Application.Services
             _repository = repository;
         }
 
-        public async Task<ResponseManager<UsersView>> GetAllUsers()
+        public async Task<ResponseManager<UsersViewDTO>> GetAllUsers()
         {
             return await _repository.GetAllUsers();
         }

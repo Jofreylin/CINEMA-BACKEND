@@ -10,6 +10,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Security.Claims;
 using Web_API.Utilities;
+using Infrastructure.Utilities;
 
 namespace Web_API.Middlewares
 {

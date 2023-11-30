@@ -19,32 +19,32 @@ namespace Application.Services
         }
 
 
-       public  Task<ResponseManager<Movie>> GetAllMovies()
+       public async  Task<ResponseManager<MoviesView>> GetAllMovies()
         {
-            return  _movieRepository.GetAllMovies();
+            return  await _movieRepository.GetAllMovies();
         }
 
-       public async Task<ResponseManager<Movie>> GetMoviesByName(string name)
+       public async Task<ResponseManager<MoviesView>> GetMoviesByName(string name)
        {
            return await _movieRepository.GetMoviesByName(name);
        }
 
-       public string Delete(long id)
+       public async Task<ResponseManager> Delete(int id, int userId)
        {
-           return _movieRepository.Delete(id);
+           return await _movieRepository.Delete(id, userId);
        }
 
-       public async Task<ResponseManager<Movie>> Update(Movie cine)
+       public async Task<ResponseManager<MovieDTO>> Update(MovieDTO cine)
        {
            return await _movieRepository.Update(cine);
        }
 
-       public async Task<ResponseManager<Movie>> Create(Movie cine)
+       public async Task<ResponseManager<MovieDTO>> Create(MovieDTO cine)
        {
            return await _movieRepository.Create(cine);
        }
 
-       public async Task<ResponseManager<Movie>> GetById(long id)
+       public async Task<ResponseManager<MoviesView>> GetById(int id)
        {
            return await _movieRepository.GetById(id);
        }

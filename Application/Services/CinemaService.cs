@@ -18,36 +18,34 @@ namespace Application.Services
             _cinemaRepository = repository;
         }
 
-     
-
-        public async Task<ResponseManager<Cinema>> GetCinemasByName(string cinemaName)
+        public async Task<ResponseManager<CinemasView>> GetCinemasByName(string cinemaName)
         {
             return await _cinemaRepository.GetCinemasByName(cinemaName);
         }
 
-        public async Task<ResponseManager<Cinema>> GetAllCinemas()
+        public async Task<ResponseManager<CinemasView>> GetAllCinemas()
         {
             return await _cinemaRepository.GetAllCinemas();
            
         }
-        public string Delete(long id)
+        public async Task<ResponseManager> Delete(int cinemaId, int userId)
         {
-            return  _cinemaRepository.Delete(id);
+            return await _cinemaRepository.Delete(cinemaId, userId);
         }
 
-        public async Task<ResponseManager<Cinema>> Update(Cinema cine)
+        public async Task<ResponseManager<CinemaDTO>> Update(CinemaDTO cine)
         {
             return await _cinemaRepository.Update(cine);
         }
 
-        public async Task<ResponseManager<Cinema>> Create(Cinema cine)
+        public async Task<ResponseManager<CinemaDTO>> Create(CinemaDTO cine)
         {
             return await _cinemaRepository.Create(cine);
         }
 
-        public async Task<ResponseManager<Cinema>> GetById(long id)
+        public async Task<ResponseManager<CinemasView>> GetById(int cinemaId)
         {
-            return await _cinemaRepository.GetById(id);
+            return await _cinemaRepository.GetById(cinemaId);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 namespace Web_API.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class MoviesController : ControllerBase
     {
@@ -16,45 +17,48 @@ namespace Web_API.Controllers
         {
             this._movieService = movieServ;
         }
-
-       
      
         [HttpGet]
-        public async Task<ActionResult<ResponseManager<Movie>>> GetAllMovies()
+        public async Task<ActionResult<ResponseManager<MoviesView>>> GetAllMovies()
         {
             var response = await _movieService.GetAllMovies();
             return Ok(response);
         }
-        [HttpPost]
-        public async Task<ActionResult<ResponseManager<Movie>>> GetMoviesByName(string name)
+
+        [HttpGet("ByName")]
+        public async Task<ActionResult<ResponseManager<MoviesView>>> GetMoviesByName(string name)
         {
             var response = await _movieService.GetMoviesByName(name);
             return Ok(response);
         }
-        [HttpPost]
-        public string Delete(long id)
-        {
-            return _movieService.Delete(id);
-        }
-        [HttpPost]
-        public async Task<ActionResult<ResponseManager<Movie>>> Update(Movie cine)
-        {
-            var response = await _movieService.Update(cine);
-            return Ok(response);
-        }
-        [HttpPost]
-        public async Task<ActionResult<ResponseManager<Movie>>> Create(Movie cine)
-        {
-            var response = await _movieService.Create(cine);
-            return Ok(response);
-        }
-        [HttpPost]
-        public async Task<ActionResult<ResponseManager<Movie>>> GetById(long id)
+
+        [HttpPost("ById")]
+        public async Task<ActionResult<ResponseManager<MoviesView>>> GetById(int id)
         {
             var response = await _movieService.GetById(id);
             return Ok(response);
         }
-       
+
+        [HttpDelete]
+        public async Task<ActionResult<ResponseManager>> Delete(int movieId, int userId)
+        {
+            var response = await _movieService.Delete(movieId, userId);
+            return Ok(response);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<ResponseManager<MovieDTO>>> Update(MovieDTO model)
+        {
+            var response = await _movieService.Update(model);
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ResponseManager<MovieDTO>>> Create(MovieDTO model)
+        {
+            var response = await _movieService.Create(model);
+            return Ok(response);
+        }
 
     }
 }

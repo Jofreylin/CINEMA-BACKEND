@@ -10,12 +10,12 @@ namespace Application.Interfaces
 {
     public interface IMovieRepository
     {
-        Task<ResponseManager<Movie>> GetAllMovies();
+        Task<ResponseManager<MoviesView>> GetAllMovies();
 
-        Task<ResponseManager<Movie>> GetMoviesByName(string name);
-        string Delete(long id);
-        Task<ResponseManager<Movie>> Update(Movie cine);
-        Task<ResponseManager<Movie>> Create (Movie cine);
-        Task<ResponseManager<Movie>> GetById(long id);
+        Task<ResponseManager<MoviesView>> GetMoviesByName(string movieName);
+        Task<ResponseManager> Delete(int movieId, int userId);
+        Task<ResponseManager<MovieDTO>> Update(MovieDTO model);
+        Task<ResponseManager<MovieDTO>> Create (MovieDTO model);
+        Task<ResponseManager<MoviesView>> GetById(int movieId);
     }
 }
