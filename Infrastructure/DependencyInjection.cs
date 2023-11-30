@@ -30,7 +30,11 @@ namespace Infrastructure
 
             services.AddScoped<IAuthenticateRepository, AuthenticateRepository>();
             services.AddScoped<IAuthenticateService, AuthenticateService>();
-            
+
+            services.AddScoped<ICinemaService, CinemaService>();
+            services.AddScoped<ICinemaRepository, CinemaRepository>();
+            services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
 
             return services;
         }

@@ -1,4 +1,6 @@
 using Application;
+using Application.Interfaces;
+using Application.Services;
 using Infrastructure;
 using Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -82,6 +84,8 @@ builder.Services
 .AddInfrastructure(databaseConnection, jwtConfigurationSection);
 
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -107,5 +111,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseDeveloperExceptionPage();
 app.Run();
+
+
+
