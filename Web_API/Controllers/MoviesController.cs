@@ -39,6 +39,13 @@ namespace Web_API.Controllers
             return Ok(response);
         }
 
+        [HttpPost("ActorsInMovie")]
+        public async Task<ActionResult<ResponseManager<ActorsInMoviesView>>> GetActorsByMovie(int movieId)
+        {
+            var response = await _movieService.GetActorsByMovie(movieId);
+            return Ok(response);
+        }
+
         [HttpDelete]
         public async Task<ActionResult<ResponseManager>> Delete(int movieId, int userId)
         {
@@ -57,6 +64,13 @@ namespace Web_API.Controllers
         public async Task<ActionResult<ResponseManager<MovieDTO>>> Create(MovieDTO model)
         {
             var response = await _movieService.Create(model);
+            return Ok(response);
+        }
+
+        [HttpDelete("DeleteActorInMovie")]
+        public async Task<ActionResult<ResponseManager>> DeleteActor(int acInMoId, int userId)
+        {
+            var response = await _movieService.DeleteActorInMovie(acInMoId, userId);
             return Ok(response);
         }
 

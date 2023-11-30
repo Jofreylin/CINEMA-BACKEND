@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.DTO;
@@ -44,4 +45,5 @@ public class MovieDTO
     public string? ImageExtension { get; set; }
 
     public int? UserId { get; set; }
+    public List<ActorsInMovieDTO> ActorsInMovies { get; set; } = new List<ActorsInMovieDTO>();
 }

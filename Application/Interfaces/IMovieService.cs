@@ -17,5 +17,7 @@ namespace Application.Interfaces
         Task<ResponseManager<MovieDTO>> Update(MovieDTO model);
         Task<ResponseManager<MovieDTO>> Create(MovieDTO model);
         Task<ResponseManager<MoviesView>> GetById(int movieId);
+        Task<ResponseManager<ActorsInMoviesView>> GetActorsByMovie(int movieId);
+        Task<ResponseManager> DeleteActorInMovie(int acInMoId, int userId);
     }
 }

@@ -110,6 +110,28 @@ namespace Infrastructure.Repositories
 
                 await _context.SaveChangesAsync();
 
+                foreach (var actor in model.ActorsInMovies)
+                {
+                    actor.MovieId = model.MovieId;
+                    var actorResponse = new ResponseManager<ActorsInMovieDTO>();
+
+                    if (actor.AcInMoId == 0)
+                    {
+                        actorResponse = await CreateActorInMovie(actor);
+                    }
+                    else
+                    {
+                        actorResponse = await UpdateActorInMovie(actor);
+                    }
+
+                    if (!actorResponse.Succeded)
+                    {
+                        await _context.Database.RollbackTransactionAsync();
+                        response.Warnings.AddRange(actorResponse.Warnings);
+                        return response;
+                    }
+                }
+
                 response.SingleData = model;
             }
             catch (CustomException e)
@@ -129,31 +151,59 @@ namespace Infrastructure.Repositories
             var response = new ResponseManager<MovieDTO>();
             try
             {
+                await _context.Database.BeginTransactionAsync();
+
                 var newMovie = new Movie
                 {
-                    MovieName           = model.MovieName,
-                    GenderId            = model.GenderId,
-                    ClassificationId    = model.ClassificationId,
-                    Synopsis            = model.Synopsis,
-                    DirectorName        = model.DirectorName,
-                    ReleaseDate         = model.ReleaseDate,
-                    ReleaseHour         = model.ReleaseHour,
-                    CreatedByUserId     = model.UserId,
-                    IsRecordActive      = true
+                    MovieName = model.MovieName,
+                    GenderId = model.GenderId,
+                    ClassificationId = model.ClassificationId,
+                    Synopsis = model.Synopsis,
+                    DirectorName = model.DirectorName,
+                    ReleaseDate = model.ReleaseDate,
+                    ReleaseHour = model.ReleaseHour,
+                    CreatedByUserId = model.UserId,
+                    IsRecordActive = true
                 };
 
                 await _context.Movies.AddAsync(newMovie);
                 await _context.SaveChangesAsync();
 
                 model.MovieId = newMovie.MovieId;
+
+                foreach (var actor in model.ActorsInMovies)
+                {
+                    actor.MovieId = newMovie.MovieId;
+
+                    var actorResponse = await CreateActorInMovie(actor);
+                    if (!actorResponse.Succeded)
+                    {
+                        await _context.Database.RollbackTransactionAsync();
+                        response.Warnings.AddRange(actorResponse.Warnings);
+                        return response;
+                    }
+                }
+
                 response.SingleData = model;
+
+                await _context.Database.CommitTransactionAsync();
             }
             catch (CustomException e)
             {
+                if (_context.Database.CurrentTransaction != null)
+                {
+                    await _context.Database.RollbackTransactionAsync();
+                }
+
                 throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
             }
             catch (Exception ex)
             {
+                if (_context.Database.CurrentTransaction != null)
+                {
+                    await _context.Database.RollbackTransactionAsync();
+                }
+
                 throw new Exception(ex.Message, ex.InnerException);
             }
 
@@ -168,6 +218,115 @@ namespace Infrastructure.Repositories
                 var movieUpd = await _context.MoviesViews.FirstOrDefaultAsync(a => a.MovieId == id);
 
                 response.SingleData = movieUpd;
+            }
+            catch (CustomException e)
+            {
+                throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+
+            return response;
+        }
+
+        public async Task<ResponseManager<ActorsInMoviesView>> GetActorsByMovie(int movieId)
+        {
+            var response = new ResponseManager<ActorsInMoviesView>();
+            try
+            {
+                var actors = await _context.ActorsInMoviesViews.Where(x => x.IsRecordActive == true &&
+                                                              x.MovieId == movieId)
+                    .OrderByDescending(o => o.CreatedAt).ToListAsync();
+                response.DataList = actors;
+            }
+            catch (CustomException e)
+            {
+                throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+
+            return response;
+        }
+        public async Task<ResponseManager<ActorsInMovieDTO>> CreateActorInMovie(ActorsInMovieDTO model)
+        {
+            var response = new ResponseManager<ActorsInMovieDTO>();
+            try
+            {
+                var newActor = new ActorsInMovie
+                {
+                    ActorFirstname = model.ActorFirstname,
+                    ActorLastname = model.ActorLastname,
+                    MovieId = model.MovieId,
+                    CreatedByUserId = model.UserId,
+                    IsRecordActive = true
+                };
+
+                await _context.ActorsInMovies.AddAsync(newActor);
+                await _context.SaveChangesAsync();
+
+                model.AcInMoId = newActor.AcInMoId;
+
+                response.SingleData = model;
+
+            }
+            catch (CustomException e)
+            {
+
+                throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+
+            return response;
+        }
+        public async Task<ResponseManager<ActorsInMovieDTO>> UpdateActorInMovie(ActorsInMovieDTO model)
+        {
+            var response = new ResponseManager<ActorsInMovieDTO>();
+            try
+            {
+                await _context.ActorsInMovies.Where(x => x.AcInMoId == model.AcInMoId)
+                    .ExecuteUpdateAsync(s => s
+                        .SetProperty(p => p.ActorFirstname, model.ActorFirstname)
+                        .SetProperty(p => p.ActorLastname, model.ActorLastname)
+                        .SetProperty(p => p.LastModificationByUserId, model.UserId)
+                        .SetProperty(p => p.LastModificationAt, DateTime.Now));
+
+                await _context.SaveChangesAsync();
+
+                response.SingleData = model;
+            }
+            catch (CustomException e)
+            {
+                throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+
+            return response;
+        }
+        public async Task<ResponseManager> DeleteActorInMovie(int acInMoId, int userId)
+        {
+            var response = new ResponseManager();
+            try
+            {
+
+                await _context.ActorsInMovies.Where(x => x.AcInMoId == acInMoId)
+                    .ExecuteUpdateAsync(s => s
+                        .SetProperty(p => p.IsRecordActive, false)
+                        .SetProperty(p => p.LastModificationByUserId, userId)
+                        .SetProperty(p => p.LastModificationAt, DateTime.Now));
+
+                await _context.SaveChangesAsync();
             }
             catch (CustomException e)
             {
