@@ -36,6 +36,15 @@ namespace Infrastructure
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
 
+            services.AddScoped<IMovieGenderService, MovieGenderService>();
+            services.AddScoped<IMovieGenderRepository, MovieGenderRepository>();
+
+            services.AddScoped<IMovieClassificationService, MovieClassificationService>();
+            services.AddScoped<IMovieClassificationRepository, MovieClassificationRepository>();
+
+            services.AddScoped<IAddressesService, AddressesService>();
+            services.AddScoped<IAddressesRepository, AddressesRepository>();
+
             return services;
         }
     }
