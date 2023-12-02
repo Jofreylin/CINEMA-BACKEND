@@ -7,8 +7,8 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Web_API/Web_API.csproj", "Web_API/"]
-RUN dotnet restore "Web_API/Web_API.csproj"
+COPY ["./Web_API/Web_API.csproj", "./Web_API/"]
+RUN dotnet restore "./Web_API/Web_API.csproj"
 COPY . .
 WORKDIR "/src/Web_API"
 RUN dotnet build "Web_API.csproj" -c Release -o /app/build
