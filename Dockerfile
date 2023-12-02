@@ -1,10 +1,9 @@
-# Set the working directory.
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+# Use the official image as a parent image.
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+# Set the working directory.
+WORKDIR /app
+
 # Copy csproj and restore as distinct layers.
 COPY *.sln .
 COPY Application/*.csproj ./Application/
@@ -18,13 +17,10 @@ COPY Application/. ./Application/
 COPY Domain/. ./Domain/
 COPY Infrastructure/. ./Infrastructure/
 COPY Web_API/. ./Web_API/
-RUN dotnet build -c Release -o /app/build
+RUN dotnet publish -c Release -o out
 
 # Build runtime image.
-FROM build AS publish
-RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "Web_API.dll"]
