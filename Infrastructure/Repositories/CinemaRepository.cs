@@ -136,6 +136,7 @@ namespace Infrastructure.Repositories
                     LocationLatitude    = model.LocationLatitude,
                     LocationLongitude   = model.LocationLongitude,
                     CreatedByUserId     = model.UserId,
+                    CreatedAt           = DateTime.Now,
                     IsRecordActive      = true
                 };
 
