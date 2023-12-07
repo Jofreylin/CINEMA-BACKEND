@@ -15,8 +15,7 @@ public partial class MovieGender
     [Unicode(false)]
     public string GenderName { get; set; } = null!;
 
-    [Required]
-    public bool? IsRecordActive { get; set; }
+    public bool IsRecordActive { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }

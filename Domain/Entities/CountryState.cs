@@ -21,8 +21,7 @@ public partial class CountryState
 
     public int? CountryId { get; set; }
 
-    [Required]
-    public bool? IsRecordActive { get; set; }
+    public bool IsRecordActive { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }

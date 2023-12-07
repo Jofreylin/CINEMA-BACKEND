@@ -19,8 +19,7 @@ public partial class Country
     [Unicode(false)]
     public string? CountryCode { get; set; }
 
-    [Required]
-    public bool? IsRecordActive { get; set; }
+    public bool IsRecordActive { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }

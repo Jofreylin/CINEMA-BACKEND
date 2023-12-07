@@ -22,8 +22,7 @@ public partial class CinemaScreen
     [Column(TypeName = "numeric(12, 2)")]
     public decimal? GeneralPriceBySeat { get; set; }
 
-    [Required]
-    public bool? IsRecordActive { get; set; }
+    public bool IsRecordActive { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }

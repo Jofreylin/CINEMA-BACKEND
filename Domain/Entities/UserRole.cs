@@ -15,8 +15,7 @@ public partial class UserRole
     [Unicode(false)]
     public string RoleName { get; set; } = null!;
 
-    [Required]
-    public bool? IsRecordActive { get; set; }
+    public bool IsRecordActive { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }

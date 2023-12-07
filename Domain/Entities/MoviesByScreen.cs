@@ -29,8 +29,7 @@ public partial class MoviesByScreen
     [Unicode(false)]
     public string? HolidayName { get; set; }
 
-    [Required]
-    public bool? IsRecordActive { get; set; }
+    public bool IsRecordActive { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }
