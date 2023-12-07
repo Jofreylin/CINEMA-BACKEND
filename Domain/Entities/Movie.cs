@@ -43,8 +43,7 @@ public partial class Movie
     [Unicode(false)]
     public string? ImageExtension { get; set; }
 
-    [Required]
-    public bool? IsRecordActive { get; set; }
+    public bool IsRecordActive { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }

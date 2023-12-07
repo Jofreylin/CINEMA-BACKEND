@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities;
 
-[Index("Email", Name = "UQ__Users__A9D10534EF16AFC3", IsUnique = true)]
+[Index("Email", Name = "UQ__Users__A9D1053420AB7864", IsUnique = true)]
 public partial class User
 {
     [Key]
@@ -32,8 +32,7 @@ public partial class User
 
     public int? RoleId { get; set; }
 
-    [Required]
-    public bool? IsRecordActive { get; set; }
+    public bool IsRecordActive { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }

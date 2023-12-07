@@ -15,8 +15,7 @@ public partial class MovieClassification
     [Unicode(false)]
     public string ClassificationName { get; set; } = null!;
 
-    [Required]
-    public bool? IsRecordActive { get; set; }
+    public bool IsRecordActive { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }
