@@ -163,6 +163,7 @@ namespace Infrastructure.Repositories
                     ReleaseDate = model.ReleaseDate,
                     ReleaseHour = model.ReleaseHour,
                     CreatedByUserId = model.UserId,
+                    CreatedAt = DateTime.Now,
                     IsRecordActive = true
                 };
 
@@ -263,6 +264,7 @@ namespace Infrastructure.Repositories
                     ActorLastname = model.ActorLastname,
                     MovieId = model.MovieId,
                     CreatedByUserId = model.UserId,
+                    CreatedAt = DateTime.Now,
                     IsRecordActive = true
                 };
 

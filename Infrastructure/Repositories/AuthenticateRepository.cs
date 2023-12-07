@@ -113,7 +113,8 @@ namespace Infrastructure.Repositories
                     Email = model.Email.ToLower(),
                     RoleId = model.RoleId,
                     Firstname = model.Firstname,
-                    Lastname = model.Lastname
+                    Lastname = model.Lastname,
+                    CreatedAt = DateTime.Now
                 };
 
                 await _context.Users.AddAsync(newUser);
