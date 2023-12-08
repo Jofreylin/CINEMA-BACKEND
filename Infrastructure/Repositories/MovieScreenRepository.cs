@@ -158,7 +158,7 @@ namespace Infrastructure.Repositories
                 x.IsRecordActive == true && 
                 x.MovieByScreenId != model.MovieByScreenId).FirstOrDefaultAsync();
 
-                if (exisitingMovie == null)
+                if (exisitingMovie != null)
                 {
                     throw new CustomException($"La pelicula seleccionada actualmente se encuentra asignada a esta misma sala en este mismo horario, favor de realizar otra combinación", null, HttpStatusCode.BadRequest);
                 }
