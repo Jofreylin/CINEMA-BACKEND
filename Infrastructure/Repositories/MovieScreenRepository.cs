@@ -107,7 +107,7 @@ namespace Infrastructure.Repositories
                 x.ShowingDate == model.ShowingDate && 
                 x.ShowingHour == model.ShowingHour && x.IsRecordActive == true).FirstOrDefaultAsync();
 
-                if (exisitingMovie == null)
+                if (exisitingMovie != null)
                 {
                     throw new CustomException($"La pelicula seleccionada actualmente se encuentra asignada a la sala seleccionada en este mismo horario, favor de realizar otra combinación", null, HttpStatusCode.BadRequest);
                 }
