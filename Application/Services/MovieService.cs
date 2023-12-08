@@ -1,9 +1,11 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,6 +49,18 @@ namespace Application.Services
         public async Task<ResponseManager<MovieDTO>> Create(MovieDTO cine)
         {
             return await _movieRepository.Create(cine);
+        }
+
+        public async Task<ResponseManager> UploadImage(MovieImageDTO model)
+        {
+
+            return await _movieRepository.UploadImage(model);
+        }
+
+        public async Task<ResponseManager> DeleteImage(int movieId, int userId)
+        {
+            return await _movieRepository.DeleteImage(movieId, userId);
+
         }
 
         public async Task<ResponseManager<MoviesView>> GetById(int id)

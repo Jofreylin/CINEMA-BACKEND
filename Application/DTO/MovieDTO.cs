@@ -31,10 +31,6 @@ public class MovieDTO
 
     public TimeSpan? ReleaseHour { get; set; }
 
-    public IFormFile? ImageUploaded { get; set; }
-
-    public bool? DeleteImageUploaded { get; set; }
-
     [Unicode(false)]
     public string? ImageBytes { get; set; }
 
@@ -48,4 +44,12 @@ public class MovieDTO
 
     public int? UserId { get; set; }
     public List<ActorsInMovieDTO> ActorsInMovies { get; set; } = new List<ActorsInMovieDTO>();
+}
+
+public class MovieImageDTO
+{
+    public int MovieId { get; set; }
+    public int? UserId { get; set; }
+    public IFormFile? ImageUploaded { get; set; }
+
 }
