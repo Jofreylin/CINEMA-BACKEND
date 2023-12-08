@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.DTO;
@@ -32,6 +30,10 @@ public class MovieDTO
     public DateTime? ReleaseDate { get; set; }
 
     public TimeSpan? ReleaseHour { get; set; }
+
+    public IFormFile? ImageUploaded { get; set; }
+
+    public bool? DeleteImageUploaded { get; set; }
 
     [Unicode(false)]
     public string? ImageBytes { get; set; }
