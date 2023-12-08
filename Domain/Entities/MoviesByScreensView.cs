@@ -13,9 +13,21 @@ public partial class MoviesByScreensView
 
     public int MovieId { get; set; }
 
+    [StringLength(200)]
+    [Unicode(false)]
+    public string MovieName { get; set; } = null!;
+
     public int ScreenId { get; set; }
 
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? ScreenName { get; set; }
+
     public int? CinemaId { get; set; }
+    
+    [StringLength(300)]
+    [Unicode(false)]
+    public string? CinemaName { get; set; }
 
     [Column(TypeName = "date")]
     public DateTime? ShowingDate { get; set; }
