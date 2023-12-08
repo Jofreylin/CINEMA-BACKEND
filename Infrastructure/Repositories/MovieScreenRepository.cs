@@ -82,6 +82,27 @@ namespace Infrastructure.Repositories
             return response;
         }
 
+        public async Task<ResponseManager<MoviesByScreensView>> GetMoviesByMovieId(int movieId)
+        {
+            var response = new ResponseManager<MoviesByScreensView>();
+            try
+            {
+                var list = await _context.MoviesByScreensViews.Where(x => x.IsRecordActive == true && x.MovieId == movieId)
+                    .OrderByDescending(o => o.CreatedAt).ToListAsync();
+                response.DataList = list;
+            }
+            catch (CustomException e)
+            {
+                throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+
+            return response;
+        }
+
         public async Task<ResponseManager<MoviesByScreenDTO>> InsertMovieByScreen(MoviesByScreenDTO model)
         {
             var response = new ResponseManager<MoviesByScreenDTO>();

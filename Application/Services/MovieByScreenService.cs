@@ -33,6 +33,11 @@ namespace Application.Services
             return await _screenRepository.GetMoviesByScreenId(screenId);
         }
 
+        public async Task<ResponseManager<MoviesByScreensView>> GetMoviesByMovieId(int movieId)
+        {
+            return await _screenRepository.GetMoviesByMovieId(movieId);
+        }
+
         public async Task<ResponseManager<MoviesByScreenDTO>> InsertMovieByScreen(MoviesByScreenDTO model)
         {
             return await _screenRepository.InsertMovieByScreen(model);

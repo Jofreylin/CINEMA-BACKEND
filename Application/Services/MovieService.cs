@@ -24,6 +24,11 @@ namespace Application.Services
             return await _movieRepository.GetAllMovies();
         }
 
+        public async Task<ResponseManager<MoviesView>> GetAllMoviesAssigned()
+        {
+            return await _movieRepository.GetAllMoviesAssigned();
+        }
+
         public async Task<ResponseManager<MoviesView>> GetMoviesByName(string name)
         {
             return await _movieRepository.GetMoviesByName(name);

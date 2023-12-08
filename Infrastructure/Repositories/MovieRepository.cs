@@ -42,6 +42,33 @@ namespace Infrastructure.Repositories
             return response;
         }
 
+        public async Task<ResponseManager<MoviesView>> GetAllMoviesAssigned()
+        {
+            var response = new ResponseManager<MoviesView>();
+            try
+            {
+                var movies = await _context.MoviesViews.Where(m => m.IsRecordActive == true)
+                    .Join(_context.MoviesByScreens.Where(ms=>ms.IsRecordActive == true),
+                        m => m.MovieId, // Primary key of Movies
+                        ms => ms.MovieId, // Foreign key in MoviesByScreens
+                        (m, ms) => m) // Select only the movies
+                    .Distinct()
+                    .OrderByDescending(o => o.CreatedAt).ToListAsync();
+
+                response.DataList = movies;
+            }
+            catch (CustomException e)
+            {
+                throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+
+            return response;
+        }
+
         public async Task<ResponseManager<MoviesView>> GetMoviesByName(string name)
         {
             var response = new ResponseManager<MoviesView>();
