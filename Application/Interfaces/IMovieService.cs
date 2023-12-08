@@ -11,7 +11,7 @@ namespace Application.Interfaces
     public interface IMovieService
     {
         Task<ResponseManager<MoviesView>> GetAllMovies();
-
+        Task<ResponseManager<MoviesView>> GetAllMoviesAssigned();
         Task<ResponseManager<MoviesView>> GetMoviesByName(string movieName);
         Task<ResponseManager> Delete(int movieId, int userId);
         Task<ResponseManager<MovieDTO>> Update(MovieDTO model);

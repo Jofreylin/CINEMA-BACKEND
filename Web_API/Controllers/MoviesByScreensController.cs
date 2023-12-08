@@ -41,6 +41,13 @@ namespace Web_API.Controllers
             return Ok(response);
         }
 
+        [HttpGet("ByMovieId")]
+        public async Task<ActionResult<ResponseManager<MoviesByScreensView>>> GetMoviesByMovieId(int movieId)
+        {
+            var response = await _screenService.GetMoviesByMovieId(movieId);
+            return Ok(response);
+        }
+
         [HttpPut]
         public async Task<ActionResult<ResponseManager<CinemaScreenDTO>>> UpdateMovieByScreen(MoviesByScreenDTO model)
         {

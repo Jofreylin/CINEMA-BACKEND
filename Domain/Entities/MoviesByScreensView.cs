@@ -17,6 +17,30 @@ public partial class MoviesByScreensView
     [Unicode(false)]
     public string MovieName { get; set; } = null!;
 
+    public int? GenderId { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? GenderName { get; set; }
+
+    public int? ClassificationId { get; set; }
+
+    [StringLength(100)]
+    [Unicode(false)]
+    public string? ClassificationName { get; set; }
+
+    [StringLength(1500)]
+    [Unicode(false)]
+    public string? Synopsis { get; set; }
+
+    [StringLength(200)]
+    [Unicode(false)]
+    public string? DirectorName { get; set; }
+
+    [StringLength(18)]
+    [Unicode(false)]
+    public string MovieTag { get; set; } = null!;
+
     public int ScreenId { get; set; }
 
     [StringLength(100)]
@@ -24,7 +48,7 @@ public partial class MoviesByScreensView
     public string? ScreenName { get; set; }
 
     public int? CinemaId { get; set; }
-    
+
     [StringLength(300)]
     [Unicode(false)]
     public string? CinemaName { get; set; }

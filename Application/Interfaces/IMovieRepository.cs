@@ -12,6 +12,8 @@ namespace Application.Interfaces
     {
         Task<ResponseManager<MoviesView>> GetAllMovies();
 
+        Task<ResponseManager<MoviesView>> GetAllMoviesAssigned();
+
         Task<ResponseManager<MoviesView>> GetMoviesByName(string movieName);
         Task<ResponseManager> Delete(int movieId, int userId);
         Task<ResponseManager<MovieDTO>> Update(MovieDTO model);

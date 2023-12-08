@@ -25,6 +25,13 @@ namespace Web_API.Controllers
             return Ok(response);
         }
 
+        [HttpGet("GetAllAssigned")]
+        public async Task<ActionResult<ResponseManager<MoviesView>>> GetAllMoviesAssigned()
+        {
+            var response = await _movieService.GetAllMoviesAssigned();
+            return Ok(response);
+        }
+
         [HttpGet("ByName")]
         public async Task<ActionResult<ResponseManager<MoviesView>>> GetMoviesByName(string movieName)
         {
