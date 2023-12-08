@@ -33,6 +33,7 @@ namespace Infrastructure
 
             services.AddScoped<ICinemaService, CinemaService>();
             services.AddScoped<ICinemaRepository, CinemaRepository>();
+
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
 
@@ -44,6 +45,12 @@ namespace Infrastructure
 
             services.AddScoped<IAddressesService, AddressesService>();
             services.AddScoped<IAddressesRepository, AddressesRepository>();
+
+            services.AddScoped<IMovieScreenService, MovieByScreenService>();
+            services.AddScoped<IMovieScreenRepository, MovieScreenRepository>();
+
+            services.AddScoped<ICinemaScreenService, CinemaScreenService>();
+            services.AddScoped<ICinemaScreenRepository, CinemaScreenRepository>();
 
             return services;
         }

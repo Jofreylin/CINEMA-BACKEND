@@ -27,16 +27,16 @@ namespace Web_API.Controllers
 
        
         [HttpGet("ByName")]
-        public async Task<ActionResult<ResponseManager<CinemasView>>> GetByName(string name)
+        public async Task<ActionResult<ResponseManager<CinemasView>>> GetByName(string cinemaName)
         {
-            var response = await _cinemaService.GetCinemasByName(name);
+            var response = await _cinemaService.GetCinemasByName(cinemaName);
             return Ok(response);
         }
 
         [HttpGet("ById")]
-        public async Task<ActionResult<ResponseManager<CinemasView>>> GetByID(int id)
+        public async Task<ActionResult<ResponseManager<CinemasView>>> GetByID(int cinemaId)
         {
-            var response = await _cinemaService.GetById(id);
+            var response = await _cinemaService.GetById(cinemaId);
             return Ok(response);
         }
      
