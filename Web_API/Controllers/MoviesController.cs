@@ -54,14 +54,14 @@ namespace Web_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ResponseManager<MovieDTO>>> Update([FromForm]  MovieDTO model)
+        public async Task<ActionResult<ResponseManager<MovieDTO>>> Update(  MovieDTO model)
         {
             var response = await _movieService.Update(model);
             return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponseManager<MovieDTO>>> Create([FromForm]  MovieDTO model)
+        public async Task<ActionResult<ResponseManager<MovieDTO>>> Create(  MovieDTO model)
         {
             var response = await _movieService.Create(model);
             return Ok(response);
