@@ -23,6 +23,10 @@ namespace Application.Services
             return await _cinemaRepository.GetCinemasByName(cinemaName);
         }
 
+        public async Task<ResponseManager<CinemasView>> GetCinemasWithMoviesAssignedByMovieId(int movieId)
+        {
+            return await _cinemaRepository.GetCinemasWithMoviesAssignedByMovieId(movieId);
+        }
         public async Task<ResponseManager<CinemasView>> GetAllCinemas()
         {
             return await _cinemaRepository.GetAllCinemas();

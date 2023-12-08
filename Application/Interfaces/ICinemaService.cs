@@ -12,6 +12,7 @@ namespace Application.Interfaces
     {
         Task<ResponseManager<CinemasView>> GetAllCinemas();
         Task<ResponseManager<CinemasView>> GetCinemasByName(string cinemaName);
+        Task<ResponseManager<CinemasView>> GetCinemasWithMoviesAssignedByMovieId(int movieId);
         Task<ResponseManager> Delete(int cinemaId, int userId);
         Task<ResponseManager<CinemaDTO>> Update(CinemaDTO cine);
         Task<ResponseManager<CinemaDTO>> Create(CinemaDTO cine);
