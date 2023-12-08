@@ -26,20 +26,20 @@ namespace Web_API.Controllers
         }
 
         [HttpGet("ByName")]
-        public async Task<ActionResult<ResponseManager<MoviesView>>> GetMoviesByName(string name)
+        public async Task<ActionResult<ResponseManager<MoviesView>>> GetMoviesByName(string movieName)
         {
-            var response = await _movieService.GetMoviesByName(name);
+            var response = await _movieService.GetMoviesByName(movieName);
             return Ok(response);
         }
 
-        [HttpPost("ById")]
-        public async Task<ActionResult<ResponseManager<MoviesView>>> GetById(int id)
+        [HttpGet("ById")]
+        public async Task<ActionResult<ResponseManager<MoviesView>>> GetById(int movieId)
         {
-            var response = await _movieService.GetById(id);
+            var response = await _movieService.GetById(movieId);
             return Ok(response);
         }
 
-        [HttpPost("ActorsInMovie")]
+        [HttpGet("ActorsInMovie")]
         public async Task<ActionResult<ResponseManager<ActorsInMoviesView>>> GetActorsByMovie(int movieId)
         {
             var response = await _movieService.GetActorsByMovie(movieId);
@@ -54,14 +54,14 @@ namespace Web_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ResponseManager<MovieDTO>>> Update(MovieDTO model)
+        public async Task<ActionResult<ResponseManager<MovieDTO>>> Update([FromForm]  MovieDTO model)
         {
             var response = await _movieService.Update(model);
             return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponseManager<MovieDTO>>> Create(MovieDTO model)
+        public async Task<ActionResult<ResponseManager<MovieDTO>>> Create([FromForm]  MovieDTO model)
         {
             var response = await _movieService.Create(model);
             return Ok(response);

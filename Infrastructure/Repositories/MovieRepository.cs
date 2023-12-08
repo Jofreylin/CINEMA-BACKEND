@@ -96,18 +96,59 @@ namespace Infrastructure.Repositories
             var response = new ResponseManager<MovieDTO>();
             try
             {
-                await _context.Movies.Where(x => x.MovieId == model.MovieId)
-                    .ExecuteUpdateAsync(s => s
-                        .SetProperty(p => p.MovieName, model.MovieName)
-                        .SetProperty(p => p.ClassificationId, model.ClassificationId == 0 ? null : model.ClassificationId)
-                        .SetProperty(p => p.GenderId, model.GenderId == 0 ? null : model.GenderId)
-                        .SetProperty(p => p.DirectorName, model.DirectorName)
-                        .SetProperty(p => p.ReleaseDate, model.ReleaseDate)
-                        .SetProperty(p => p.ReleaseHour, model.ReleaseHour)
-                        .SetProperty(p => p.Synopsis, model.Synopsis)
-                        .SetProperty(p => p.LastModificationByUserId, model.UserId)
-                        .SetProperty(p => p.LastModificationAt, DateTime.Now));
+                await _context.Database.BeginTransactionAsync();
 
+                var movie = await _context.Movies.FirstOrDefaultAsync(x => x.MovieId == model.MovieId);
+                if (movie == null)
+                {
+                    throw new CustomException($"La pelicula seleccionada no ha podido ser encontrada.", null, HttpStatusCode.BadRequest);
+                }
+
+                movie.MovieName = model.MovieName;
+                movie.ClassificationId = model.ClassificationId == 0 ? null : model.ClassificationId;
+                movie.GenderId = model.GenderId == 0 ? null : model.GenderId;
+                movie.DirectorName = model.DirectorName;
+                movie.ReleaseDate = model.ReleaseDate;
+                movie.ReleaseHour = model.ReleaseHour;
+                movie.Synopsis = model.Synopsis;
+                movie.ImageBytes = model.DeleteImageUploaded == true ? null : movie.ImageBytes;
+                movie.ImageName = model.DeleteImageUploaded == true ? null : movie.ImageName;
+                movie.ImageExtension = model.DeleteImageUploaded == true ? null : movie.ImageExtension;
+                movie.LastModificationByUserId = model.UserId;
+                movie.LastModificationAt = DateTime.Now;
+
+
+                string? fileName = null;
+                string? fileExtension = null;
+                string? fileContentBase64 = null;
+
+                if (model.ImageUploaded != null || model.ImageUploaded?.Length > 0)
+                {
+                    if (model.ImageUploaded.Length > (5 * 1024 * 1024))
+                    {
+                        throw new CustomException($"El archivo es demasiado grande. El tamaño máximo permitido es de 5MB.", null, HttpStatusCode.BadRequest);
+                    }
+
+                    // Convertir el archivo en un array de bytes
+                    byte[] fileBytes;
+                    await using (var ms = new MemoryStream())
+                    {
+                        await model.ImageUploaded.CopyToAsync(ms);
+                        fileBytes = ms.ToArray();
+                    }
+
+                    // Separar el nombre del archivo y la extensión
+                    fileName = Path.GetFileNameWithoutExtension(model.ImageUploaded.FileName);
+                    fileExtension = Path.GetExtension(model.ImageUploaded.FileName);
+                    fileContentBase64 = Convert.ToBase64String(fileBytes);
+
+                    movie.ImageBytes = fileContentBase64;
+                    movie.ImageName = fileName;
+                    movie.ImageExtension = fileExtension;
+
+                }
+
+                _context.Movies.Update(movie);
                 await _context.SaveChangesAsync();
 
                 foreach (var actor in model.ActorsInMovies)
@@ -133,13 +174,25 @@ namespace Infrastructure.Repositories
                 }
 
                 response.SingleData = model;
+
+                await _context.Database.CommitTransactionAsync();
             }
             catch (CustomException e)
             {
+                if (_context.Database.CurrentTransaction != null)
+                {
+                    await _context.Database.RollbackTransactionAsync();
+                }
+
                 throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
             }
             catch (Exception ex)
             {
+                if (_context.Database.CurrentTransaction != null)
+                {
+                    await _context.Database.RollbackTransactionAsync();
+                }
+
                 throw new Exception(ex.Message, ex.InnerException);
             }
 
@@ -153,6 +206,35 @@ namespace Infrastructure.Repositories
             {
                 await _context.Database.BeginTransactionAsync();
 
+                
+                string? fileName = null;
+                string? fileExtension = null;
+                string? fileContentBase64 = null;
+
+                if (model.ImageUploaded != null || model.ImageUploaded?.Length > 0)
+                {
+                    if (model.ImageUploaded.Length > (5 * 1024 * 1024))
+                    {
+                        throw new CustomException($"El archivo es demasiado grande. El tamaño máximo permitido es de 5MB.", null, HttpStatusCode.BadRequest);
+                    }
+
+                    // Convertir el archivo en un array de bytes
+                    byte[] fileBytes;
+                    await using (var ms = new MemoryStream())
+                    {
+                        await model.ImageUploaded.CopyToAsync(ms);
+                        fileBytes = ms.ToArray();
+                    }
+
+                    // Separar el nombre del archivo y la extensión
+                    fileName = Path.GetFileNameWithoutExtension(model.ImageUploaded.FileName);
+                    fileExtension = Path.GetExtension(model.ImageUploaded.FileName);
+                    fileContentBase64 = Convert.ToBase64String(fileBytes);
+
+                }
+
+
+
                 var newMovie = new Movie
                 {
                     MovieName = model.MovieName,
@@ -162,6 +244,9 @@ namespace Infrastructure.Repositories
                     DirectorName = model.DirectorName,
                     ReleaseDate = model.ReleaseDate,
                     ReleaseHour = model.ReleaseHour,
+                    ImageBytes = fileContentBase64,
+                    ImageName = fileName,
+                    ImageExtension = fileExtension,
                     CreatedByUserId = model.UserId,
                     CreatedAt = DateTime.Now,
                     IsRecordActive = true
