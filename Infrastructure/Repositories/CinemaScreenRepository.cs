@@ -74,6 +74,7 @@ namespace Infrastructure.Repositories
 
                 var newScreen = new CinemaScreen
                 {
+                    ScreenName = model.ScreenName,
                     CinemaId = model.CinemaId == 0 ? null : model.CinemaId,
                     CreatedByUserId = model.UserId,
                     CreatedAt = DateTime.Now,
@@ -107,6 +108,7 @@ namespace Infrastructure.Repositories
                 await _context.CinemaScreens.Where(x => x.ScreenId == model.ScreenId)
                     .ExecuteUpdateAsync(s => s
                         .SetProperty(p => p.ScreenName, model.ScreenName)
+                        .SetProperty(p => p.CinemaId, model.CinemaId)
                         .SetProperty(p => p.Seats, model.Seats)
                         .SetProperty(p => p.GeneralPriceBySeat, model.GeneralPriceBySeat)
                         .SetProperty(p => p.LastModificationByUserId, model.UserId)
