@@ -42,12 +42,12 @@ namespace Web_API.Middlewares
 
 
         //Model the error's information to then return it
-        private static Task HandleExceptionAsync(HttpContext context, string message, string messageForUser, HttpStatusCode status)
+        private async Task HandleExceptionAsync(HttpContext context, string message, string messageForUser, HttpStatusCode status)
         {
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)status;
-            return context.Response.WriteAsync(new ErrorResponse()
+            await context.Response.WriteAsync(new ErrorResponse()
             {
                 StatusCode = context.Response.StatusCode,
                 Message = messageForUser,

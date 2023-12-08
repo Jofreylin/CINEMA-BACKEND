@@ -13,7 +13,7 @@ public partial class CinemaScreen
 
     [StringLength(100)]
     [Unicode(false)]
-    public string ScreenName { get; set; } = null!;
+    public string? ScreenName { get; set; }
 
     public int? CinemaId { get; set; }
 
