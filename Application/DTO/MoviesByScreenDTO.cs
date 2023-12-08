@@ -4,18 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Domain.Entities;
+namespace Application.DTO;
 
-[Keyless]
-public partial class MoviesByScreensView
+public class MoviesByScreenDTO
 {
+    [Key]
     public int MovieByScreenId { get; set; }
 
     public int MovieId { get; set; }
 
     public int ScreenId { get; set; }
-
-    public int? CinemaId { get; set; }
 
     [Column(TypeName = "date")]
     public DateTime? ShowingDate { get; set; }
@@ -31,15 +29,6 @@ public partial class MoviesByScreensView
     [Unicode(false)]
     public string? HolidayName { get; set; }
 
-    public bool IsRecordActive { get; set; }
+    public int? UserId { get; set; }
 
-    [Column(TypeName = "datetime")]
-    public DateTime? CreatedAt { get; set; }
-
-    public int? CreatedByUserId { get; set; }
-
-    [Column(TypeName = "datetime")]
-    public DateTime? LastModificationAt { get; set; }
-
-    public int? LastModificationByUserId { get; set; }
 }

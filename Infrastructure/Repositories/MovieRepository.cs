@@ -99,8 +99,8 @@ namespace Infrastructure.Repositories
                 await _context.Movies.Where(x => x.MovieId == model.MovieId)
                     .ExecuteUpdateAsync(s => s
                         .SetProperty(p => p.MovieName, model.MovieName)
-                        .SetProperty(p => p.ClassificationId, model.ClassificationId)
-                        .SetProperty(p => p.GenderId, model.GenderId)
+                        .SetProperty(p => p.ClassificationId, model.ClassificationId == 0 ? null : model.ClassificationId)
+                        .SetProperty(p => p.GenderId, model.GenderId == 0 ? null : model.GenderId)
                         .SetProperty(p => p.DirectorName, model.DirectorName)
                         .SetProperty(p => p.ReleaseDate, model.ReleaseDate)
                         .SetProperty(p => p.ReleaseHour, model.ReleaseHour)
@@ -156,8 +156,8 @@ namespace Infrastructure.Repositories
                 var newMovie = new Movie
                 {
                     MovieName = model.MovieName,
-                    GenderId = model.GenderId,
-                    ClassificationId = model.ClassificationId,
+                    GenderId = model.GenderId == 0 ? null : model.GenderId,
+                    ClassificationId = model.ClassificationId == 0 ? null : model.ClassificationId,
                     Synopsis = model.Synopsis,
                     DirectorName = model.DirectorName,
                     ReleaseDate = model.ReleaseDate,
