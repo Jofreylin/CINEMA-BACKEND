@@ -39,7 +39,14 @@ namespace Web_API.Controllers
             var response = await _cinemaService.GetById(cinemaId);
             return Ok(response);
         }
-     
+
+        [HttpGet("WithMoviesAssignedByMovieId")]
+        public async Task<ActionResult<ResponseManager<CinemasView>>> GetCinemasWithMoviesAssignedByMovieId(int movieId)
+        {
+            var response = await _cinemaService.GetCinemasWithMoviesAssignedByMovieId(movieId);
+            return Ok(response);
+        }
+
         [HttpDelete]
         public async Task<ActionResult<ResponseManager>> Delete(int cinemaId, int userId)
         {
