@@ -125,6 +125,7 @@ namespace Infrastructure.Repositories
             {
                 await _context.Database.BeginTransactionAsync();
 
+
                 var movie = await _context.Movies.FirstOrDefaultAsync(x => x.MovieId == model.MovieId);
                 if (movie == null)
                 {
@@ -138,42 +139,10 @@ namespace Infrastructure.Repositories
                 movie.ReleaseDate = model.ReleaseDate;
                 movie.ReleaseHour = model.ReleaseHour;
                 movie.Synopsis = model.Synopsis;
-                movie.ImageBytes = model.DeleteImageUploaded == true ? null : movie.ImageBytes;
-                movie.ImageName = model.DeleteImageUploaded == true ? null : movie.ImageName;
-                movie.ImageExtension = model.DeleteImageUploaded == true ? null : movie.ImageExtension;
+               
                 movie.LastModificationByUserId = model.UserId;
                 movie.LastModificationAt = DateTime.Now;
 
-
-                string? fileName = null;
-                string? fileExtension = null;
-                string? fileContentBase64 = null;
-
-                if (model.ImageUploaded != null || model.ImageUploaded?.Length > 0)
-                {
-                    if (model.ImageUploaded.Length > (5 * 1024 * 1024))
-                    {
-                        throw new CustomException($"El archivo es demasiado grande. El tamaño máximo permitido es de 5MB.", null, HttpStatusCode.BadRequest);
-                    }
-
-                    // Convertir el archivo en un array de bytes
-                    byte[] fileBytes;
-                    await using (var ms = new MemoryStream())
-                    {
-                        await model.ImageUploaded.CopyToAsync(ms);
-                        fileBytes = ms.ToArray();
-                    }
-
-                    // Separar el nombre del archivo y la extensión
-                    fileName = Path.GetFileNameWithoutExtension(model.ImageUploaded.FileName);
-                    fileExtension = Path.GetExtension(model.ImageUploaded.FileName);
-                    fileContentBase64 = Convert.ToBase64String(fileBytes);
-
-                    movie.ImageBytes = fileContentBase64;
-                    movie.ImageName = fileName;
-                    movie.ImageExtension = fileExtension;
-
-                }
 
                 _context.Movies.Update(movie);
                 await _context.SaveChangesAsync();
@@ -233,35 +202,6 @@ namespace Infrastructure.Repositories
             {
                 await _context.Database.BeginTransactionAsync();
 
-                
-                string? fileName = null;
-                string? fileExtension = null;
-                string? fileContentBase64 = null;
-
-                if (model.ImageUploaded != null || model.ImageUploaded?.Length > 0)
-                {
-                    if (model.ImageUploaded.Length > (5 * 1024 * 1024))
-                    {
-                        throw new CustomException($"El archivo es demasiado grande. El tamaño máximo permitido es de 5MB.", null, HttpStatusCode.BadRequest);
-                    }
-
-                    // Convertir el archivo en un array de bytes
-                    byte[] fileBytes;
-                    await using (var ms = new MemoryStream())
-                    {
-                        await model.ImageUploaded.CopyToAsync(ms);
-                        fileBytes = ms.ToArray();
-                    }
-
-                    // Separar el nombre del archivo y la extensión
-                    fileName = Path.GetFileNameWithoutExtension(model.ImageUploaded.FileName);
-                    fileExtension = Path.GetExtension(model.ImageUploaded.FileName);
-                    fileContentBase64 = Convert.ToBase64String(fileBytes);
-
-                }
-
-
-
                 var newMovie = new Movie
                 {
                     MovieName = model.MovieName,
@@ -271,9 +211,6 @@ namespace Infrastructure.Repositories
                     DirectorName = model.DirectorName,
                     ReleaseDate = model.ReleaseDate,
                     ReleaseHour = model.ReleaseHour,
-                    ImageBytes = fileContentBase64,
-                    ImageName = fileName,
-                    ImageExtension = fileExtension,
                     CreatedByUserId = model.UserId,
                     CreatedAt = DateTime.Now,
                     IsRecordActive = true
@@ -298,6 +235,133 @@ namespace Infrastructure.Repositories
                 }
 
                 response.SingleData = model;
+
+                await _context.Database.CommitTransactionAsync();
+            }
+            catch (CustomException e)
+            {
+                if (_context.Database.CurrentTransaction != null)
+                {
+                    await _context.Database.RollbackTransactionAsync();
+                }
+
+                throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
+            }
+            catch (Exception ex)
+            {
+                if (_context.Database.CurrentTransaction != null)
+                {
+                    await _context.Database.RollbackTransactionAsync();
+                }
+
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+
+            return response;
+        }
+
+        public async Task<ResponseManager> UploadImage(MovieImageDTO model)
+        {
+
+            var response = new ResponseManager();
+            try
+            {
+                await _context.Database.BeginTransactionAsync();
+
+
+                var movie = await _context.Movies.FirstOrDefaultAsync(x => x.MovieId == model.MovieId);
+                if (movie == null)
+                {
+                    throw new CustomException($"La pelicula seleccionada no ha podido ser encontrada.", null, HttpStatusCode.BadRequest);
+                }
+
+                movie.LastModificationByUserId = model.UserId;
+                movie.LastModificationAt = DateTime.Now;
+
+
+                string? fileName = null;
+                string? fileExtension = null;
+                string? fileContentBase64 = null;
+
+                if (model.ImageUploaded != null || model.ImageUploaded?.Length > 0)
+                {
+                    if (model.ImageUploaded.Length > (5 * 1024 * 1024))
+                    {
+                        throw new CustomException($"El archivo es demasiado grande. El tamaño máximo permitido es de 5MB.", null, HttpStatusCode.BadRequest);
+                    }
+
+                    // Convertir el archivo en un array de bytes
+                    byte[] fileBytes;
+                    await using (var ms = new MemoryStream())
+                    {
+                        await model.ImageUploaded.CopyToAsync(ms);
+                        fileBytes = ms.ToArray();
+                    }
+
+                    // Separar el nombre del archivo y la extensión
+                    fileName = Path.GetFileNameWithoutExtension(model.ImageUploaded.FileName);
+                    fileExtension = Path.GetExtension(model.ImageUploaded.FileName);
+                    fileContentBase64 = Convert.ToBase64String(fileBytes);
+
+                    movie.ImageBytes = fileContentBase64;
+                    movie.ImageName = fileName;
+                    movie.ImageExtension = fileExtension;
+
+                }
+
+                _context.Movies.Update(movie);
+                await _context.SaveChangesAsync();
+
+
+                await _context.Database.CommitTransactionAsync();
+            }
+            catch (CustomException e)
+            {
+                if (_context.Database.CurrentTransaction != null)
+                {
+                    await _context.Database.RollbackTransactionAsync();
+                }
+
+                throw new CustomException(e.Message, e.InnerException, e.StatusCode, e.ClassName, e.MethodName, e.CreationUserId);
+            }
+            catch (Exception ex)
+            {
+                if (_context.Database.CurrentTransaction != null)
+                {
+                    await _context.Database.RollbackTransactionAsync();
+                }
+
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+
+            return response;
+        }
+
+        public async Task<ResponseManager> DeleteImage(int movieId, int userId)
+        {
+
+            var response = new ResponseManager();
+            try
+            {
+                await _context.Database.BeginTransactionAsync();
+
+
+                var movie = await _context.Movies.FirstOrDefaultAsync(x => x.MovieId == movieId);
+                if (movie == null)
+                {
+                    throw new CustomException($"La pelicula seleccionada no ha podido ser encontrada.", null, HttpStatusCode.BadRequest);
+                }
+
+                movie.ImageBytes = null;
+                movie.ImageName = null;
+                movie.ImageExtension = null;
+                movie.LastModificationByUserId = userId;
+                movie.LastModificationAt = DateTime.Now;
+
+
+                _context.Movies.Update(movie);
+                await _context.SaveChangesAsync();
+
 
                 await _context.Database.CommitTransactionAsync();
             }

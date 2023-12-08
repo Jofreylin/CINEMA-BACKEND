@@ -1,9 +1,13 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
 using Domain.Entities;
+using Infrastructure.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Web_API.Utilities;
+
 namespace Web_API.Controllers
 {
     [Route("api/[controller]")]
@@ -61,18 +65,71 @@ namespace Web_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ResponseManager<MovieDTO>>> Update(  MovieDTO model)
+        public async Task<ActionResult<ResponseManager<MovieDTO>>> Update( MovieDTO model)
         {
             var response = await _movieService.Update(model);
             return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponseManager<MovieDTO>>> Create(  MovieDTO model)
+        public async Task<ActionResult<ResponseManager<MovieDTO>>> Create( MovieDTO model)
         {
             var response = await _movieService.Create(model);
             return Ok(response);
         }
+
+        [HttpPut("UploadImage")]
+        public async Task<ActionResult<ResponseManager>> UploadImage([FromForm] MovieImageDTO model)
+        {
+            var response = await _movieService.UploadImage(model);
+            return Ok(response);
+        }
+
+        [HttpDelete("DeleteImage")]
+        public async Task<ActionResult<ResponseManager>> DeleteImage(int movieId, int userId)
+        {
+            var response = await _movieService.DeleteImage(movieId, userId);
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("ViewImage/{movieId}")]
+        public async Task<ActionResult> ViewDocument(int movieId)
+        {
+            var response = new ResponseManager<MoviesView>();
+
+            response = await _movieService.GetById(movieId);
+
+            if (!response.Succeded)
+            {
+                return StatusCode(400, response);
+            }
+
+            if (response.SingleData is null)
+            {
+                throw new CustomException($"La pelicula seleccionada no ha podido ser encontrada.", null, HttpStatusCode.BadRequest);
+            }
+
+            string base64 = response.SingleData.ImageBytes ?? "";
+
+            if (string.IsNullOrWhiteSpace(base64))
+            {
+                throw new CustomException($"La pelicula seleccionada no tiene imagen asignada.", null, HttpStatusCode.BadRequest);
+            }
+
+            var bytes = Convert.FromBase64String(base64);
+
+            string completeFileName = $"{response.SingleData.ImageName}{response.SingleData.ImageExtension}";
+            var mime = ContentTypeMapper.GetMimeType(completeFileName);
+
+            if(mime == null)
+            {
+                throw new CustomException($"La imagen encontrada no es valida.", null, HttpStatusCode.BadRequest);
+            }
+
+            return File(bytes, mime, enableRangeProcessing: true);
+        }
+
 
         [HttpDelete("DeleteActorInMovie")]
         public async Task<ActionResult<ResponseManager>> DeleteActor(int acInMoId, int userId)

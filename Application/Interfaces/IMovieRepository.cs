@@ -19,7 +19,8 @@ namespace Application.Interfaces
         Task<ResponseManager<MovieDTO>> Update(MovieDTO model);
         Task<ResponseManager<MovieDTO>> Create (MovieDTO model);
         Task<ResponseManager<MoviesView>> GetById(int movieId);
-
+        Task<ResponseManager> UploadImage(MovieImageDTO model);
+        Task<ResponseManager> DeleteImage(int movieId, int userId);
         Task<ResponseManager<ActorsInMoviesView>> GetActorsByMovie(int movieId);
         Task<ResponseManager<ActorsInMovieDTO>> CreateActorInMovie(ActorsInMovieDTO model);
         Task<ResponseManager<ActorsInMovieDTO>> UpdateActorInMovie(ActorsInMovieDTO model);
