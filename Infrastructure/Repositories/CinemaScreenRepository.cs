@@ -76,6 +76,8 @@ namespace Infrastructure.Repositories
                 {
                     ScreenName = model.ScreenName,
                     CinemaId = model.CinemaId == 0 ? null : model.CinemaId,
+                    GeneralPriceBySeat = model.GeneralPriceBySeat,
+                    Seats = model.Seats,  
                     CreatedByUserId = model.UserId,
                     CreatedAt = DateTime.Now,
                     IsRecordActive = true
